@@ -12,6 +12,7 @@ public class AudioManager : MonoBehaviour
     public Sound[] music;
     public AudioMixerGroup musicMixer;
     public AudioMixerGroup soundMixer;
+    public bool musicMute;
 
     public static AudioManager instance;
     // Start is called before the first frame update
@@ -55,7 +56,8 @@ public class AudioManager : MonoBehaviour
             m.source.outputAudioMixerGroup = musicMixer;
         }
         //this could be used to play music when a scene loads
-        PlayMusic("BGM");
+        Debug.Log("noodles");
+        PlayMusic("bgm");
     }
 
     //this could be used to play music when a scene loads
@@ -72,6 +74,7 @@ public class AudioManager : MonoBehaviour
             return;
         }
         s.source.Play();
+        Debug.Log(name);
     }
 
     public void PlayMusic(string name)
@@ -84,6 +87,38 @@ public class AudioManager : MonoBehaviour
             return;
         }
         m.source.Play();
+        Debug.Log(name);
+    }
+
+    public void SetFullscreen (bool isMuted)
+    {
+        if(isMuted)
+        {
+            musicMute = true;
+        }
+        else
+        {
+            musicMute = false;
+        }
+    }
+
+    public void Update()
+    {
+        foreach(Sound m in music)
+        {
+
+            m.source.volume = m.volume;
+            m.source.pitch = m.pitch;
+            m.source.loop = m.loop;
+            if (musicMute)
+            {
+                m.pitch = 0;
+            }
+            else
+            {
+                m.pitch = 1;
+            }
+        }
     }
 
     //to play do

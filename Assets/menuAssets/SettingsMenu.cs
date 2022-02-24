@@ -4,6 +4,8 @@ using System.ComponentModel.Design;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
+using TMPro;
+using UnityEngine.EventSystems;
 
 public class SettingsMenu : MonoBehaviour {
 
@@ -19,12 +21,31 @@ public class SettingsMenu : MonoBehaviour {
 
     public Slider master, music, effects;
 
+    public int difficulty;
+
+    public TextMeshProUGUI diffText;
+
+    public GameObject pauseFirstButton, settingsFirstButton, helpFirstButton, audioFirstButton, videoFirstButton, difficultyFirstButton;
+
     Resolution[] resolutions;
 
     void Start ()
     {
+
+        //clear selected objecy
+        EventSystem.current.SetSelectedGameObject(null);
+        //set new selection
+        EventSystem.current.SetSelectedGameObject(pauseFirstButton);
+
+
+
+
+
         //Loads all player prefs except resolution
         LoadPrefs();
+
+        //sets diff
+        ReadDiff();
 
         resolutions = Screen.resolutions;
 
@@ -115,6 +136,32 @@ public class SettingsMenu : MonoBehaviour {
         }
     }
 
+
+    public void SetDifficulty (int Tdifficulty)
+    {
+        PlayerPrefs.SetInt("Difficulty", Tdifficulty);
+        ReadDiff();
+        //Debug.Log(Tdifficulty);
+    }
+
+    void ReadDiff()
+    {
+        difficulty = PlayerPrefs.GetInt("Difficulty");
+        if(difficulty == 0){
+            diffText.text = "Current: easy";
+        }
+        if(difficulty == 1){
+            diffText.text = "Current: medium";
+        }
+        if(difficulty == 2){
+            diffText.text = "Current: hard";
+        }
+        else{
+            Debug.Log("panic");
+        }
+
+    }
+
     void LoadPrefs()
     {
         QualityDropdown.value = PlayerPrefs.GetInt("QualityLevel");
@@ -122,6 +169,52 @@ public class SettingsMenu : MonoBehaviour {
         music.value = PlayerPrefs.GetFloat("BgmVolume");
         effects.value = PlayerPrefs.GetFloat("SfxVolume");
         CheckFullscreen(PlayerPrefs.GetInt("FullscreenBool"));
+        difficulty = PlayerPrefs.GetInt("Difficulty");
+    }
+
+    public void SelectOptions()
+    {
+        //clear selected object
+        EventSystem.current.SetSelectedGameObject(null);
+        //set new selection
+        EventSystem.current.SetSelectedGameObject(settingsFirstButton);
+    }
+
+    public void SelectVideo()
+    {
+        //clear selected object
+        EventSystem.current.SetSelectedGameObject(null);
+        //set new selection
+        EventSystem.current.SetSelectedGameObject(videoFirstButton);
+    }
+
+    public void SelectDifficulty()
+    {
+        //clear selected object
+        EventSystem.current.SetSelectedGameObject(null);
+        //set new selection
+        EventSystem.current.SetSelectedGameObject(difficultyFirstButton);
+    }
+
+    public void SelectAudio()
+    {
+        //clear selected object
+        EventSystem.current.SetSelectedGameObject(null);
+        //set new selection
+        EventSystem.current.SetSelectedGameObject(audioFirstButton);
+    }
+
+    public void SelectHelp()
+    {
+        //clear selected object
+        EventSystem.current.SetSelectedGameObject(null);
+        //set new selection
+        EventSystem.current.SetSelectedGameObject(helpFirstButton);
+    }
+
+    public void PlaySelect()
+    {
+        FindObjectOfType<AudioManager>().Play("select");
     }
 
 }
