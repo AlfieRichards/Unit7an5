@@ -172,6 +172,14 @@ public class SettingsMenu : MonoBehaviour {
         difficulty = PlayerPrefs.GetInt("Difficulty");
     }
 
+    public void SelectPlay()
+    {
+        //clear selected object
+        EventSystem.current.SetSelectedGameObject(null);
+        //set new selection
+        EventSystem.current.SetSelectedGameObject(pauseFirstButton);
+    }
+
     public void SelectOptions()
     {
         //clear selected object
